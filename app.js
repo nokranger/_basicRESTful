@@ -2,9 +2,26 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
 const productRoute = require('./api/route/product')
 const ordersRoute = require('./api/route/orders')
+
+
+//this setting connect mongoDB
+// mongoose.connect('mongodb://nokranger:'+ 
+// process.env.MONGO_ATLAS_PW +
+// '@node-rest-shard-00-00-jyl94.mongodb.net:27017,node-rest-shard-00-01-jyl94.mongodb.net:27017,node-rest-shard-00-02-jyl94.mongodb.net:27017/test?ssl=true&replicaSet=node-rest-shard-0&authSource=admin&retryWrites=true',
+// {
+//     useMongoClient: true
+// }
+// )
+
+mongoose.connect('mongodb+srv://nokranger:'+ 
+process.env.MONGO_ATLAS_PW+
+'@node-rest-jyl94.mongodb.net/test?retryWrites=true',{
+    useMongoClient: true
+})
 
 // app.use((req,res,next) => {
 //     res.status(200).json({
