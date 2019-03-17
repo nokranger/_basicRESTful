@@ -7,9 +7,15 @@ route.get('/',function(req,res,next){
     })    
 })
 route.post('/',function(req,res,next){
-    res.status(200).json({
-        message : 'Order were created'
+    let order = {
+        productId : req.body.productId,
+        quantity : req.body.quantity
+    }
+    res.status(201).json({
+        message : 'Order were created',
+        order : order
     })    
+    console.log(order)
 })
 route.get('/:orderId',function(req,res,next){
     res.status(200).json({
