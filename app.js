@@ -16,11 +16,11 @@ const ordersRoute = require('./api/route/orders')
 //     useMongoClient: true
 // }
 // )
-
+//This setting connect DB
 mongoose.connect('mongodb+srv://nokranger:'+ 
 process.env.MONGO_ATLAS_PW+
 '@node-rest-jyl94.mongodb.net/test?retryWrites=true',{
-    useMongoClient: true
+    useNewUrlParser: true
 })
 
 // app.use((req,res,next) => {
