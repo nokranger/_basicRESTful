@@ -9,11 +9,26 @@ route.get('/',function(req,res,next){
     //     message : 'Handling get request to /product'
     // })
     Product.find()
+    .select('name price _id')
     .exec()
     .then(docs => {
+        let response = {
+            count : docs.length,
+            products : docs.map(doc => {
+                return {
+                    name : doc.name,
+                    price : doc.price,
+                    _id : doc._id,
+                    request : {
+                        type : 'GET',
+                        url : 'http://localhost:8081/product/' + doc._id
+                    }
+                }
+            })
+        }
         console.log(docs)
         // if(docs.length >= 0){
-            res.status(200).json(docs)
+            res.status(200).json(response)
         // }else{
         //     res.status(404).json({
         //         message : "No entries found"
@@ -43,8 +58,16 @@ route.post('/',function(req,res,next){
     .then(result => {
         console.log(result)
         res.status(201).json({
-            message : 'Handling post request to /product',
-            createProduct : result
+            message : 'Create Product successfully',
+            createProduct : {
+                name : result.name,
+                price : result.price,
+                _id : result._id,
+                request : {
+                    type : 'GET',
+                    url : 'http://localhost:8081/product/' + result._id
+                }
+            }
         })
     })
     .catch(err => {
@@ -59,11 +82,18 @@ route.post('/',function(req,res,next){
 route.get('/:productId',function(req,res,next){
     const id = req.params.productId
     Product.findById(id)
+    .select('name price _id')
     .exec()
     .then(doc =>{
         console.log("From Data base",doc)
         if(doc){
-        res.status(200).json(doc)
+        res.status(200).json({
+            product : doc,
+            request : {
+                type : 'GET',
+                url : 'http://localhost:8081/product/'
+            }
+        })
         }else{
             res.status(404).json({message : "No valid entry for productID"})
         }
@@ -86,7 +116,13 @@ route.patch('/:productId',function(req,res,next){
     .exec()
     .then(result => {
         console.log(result)
-        res.status(200).json(result)
+        res.status(200).json({
+            message : 'Product update',
+            request : {
+                type : 'GET',
+                url : 'http://localhost:8081/product/' + result._id
+            }
+        })
     })
     .catch(err => {
         console.log(err)
@@ -101,7 +137,17 @@ Product.remove({_id : id})
 .exec()
 .then(result => {
     console.log("Delete product",result)
-    res.status(200).json(result)
+    res.status(200).json({
+        message : 'Product deleted',
+        request : {
+            type : 'POST',
+            url : 'http://localhost:8081/product/',
+            body : {
+                name : 'String',
+                price : 'Number'
+            }
+        }
+    })
 })
 .catch(err => {
     console.log(err)

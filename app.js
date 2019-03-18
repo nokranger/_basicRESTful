@@ -22,6 +22,7 @@ process.env.MONGO_ATLAS_PW+
 '@node-rest-jyl94.mongodb.net/test?retryWrites=true',{
     useNewUrlParser: true
 })
+mongoose.Promise = global.Promise
 
 // app.use((req,res,next) => {
 //     res.status(200).json({
