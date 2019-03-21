@@ -1,38 +1,10 @@
-const express = require('express')
-const route = express.Router()
+//--------------This is nodemodule---------------//
 const mongoose = require('mongoose')
-const multer = require('multer')
-const checkAuth = require('/NodeJS/Restful_node/middleware/check-auth')
 
-const storage = multer.diskStorage({
-    destination : function(req,file,cb){
-        cb(null,'./uploads')
-    },
-    filename : function(req,file,cb){
-        cb(null, new Date().toISOString().replace(/:|\./g,'') + '-' + file.originalname);
-    }
-})
-
-const fileFilter = (req,file,cb) =>{
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-        cb(null,true)
-    }else{
-        cb(null,false)
-    }
-
-}
-
-const upload = multer({
-    storage : storage,
-    limits : {
-        fileSize : 1024 * 1024 * 5
-    },
-    fileFilter : fileFilter
-})
-
+//--------------This is model---------------//
 const Product = require('../models/product')
 
-route.get('/',checkAuth,function(req,res,next){
+exports.products_get_all = function(req,res,next){
     // res.status(200).json({
     //     message : 'Handling get request to /product'
     // })
@@ -71,8 +43,9 @@ route.get('/',checkAuth,function(req,res,next){
             error : err
         })
     })
-})
-route.post('/',checkAuth,upload.single('productImage'),function(req,res,next){
+}
+
+exports.products_create_products = function(req,res,next){
     // let product = {
     //     name : req.body.name,
     //     price : req.body.price
@@ -109,8 +82,9 @@ route.post('/',checkAuth,upload.single('productImage'),function(req,res,next){
     })
 
     console.log(product)
-})
-route.get('/:productId',checkAuth,function(req,res,next){
+}
+
+exports.products_get_product = function(req,res,next){
     const id = req.params.productId
     Product.findById(id)
     .select('name price _id productImage')
@@ -133,8 +107,9 @@ route.get('/:productId',checkAuth,function(req,res,next){
         console.log(err)
         res.status(500).json({error : err})
     })
-})
-route.patch('/:productId',checkAuth,function(req,res,next){
+}
+
+exports.product_update_products = function(req,res,next){
     // res.status(200).json({
     //     message : 'Update product'
     // })
@@ -161,8 +136,9 @@ route.patch('/:productId',checkAuth,function(req,res,next){
             error : err
         })
     })
-})
-route.delete('/:productId',checkAuth,function(req,res,next){
+}
+
+exports.product_delete_products = function(req,res,next){
     let id = req.params.productId
 Product.remove({_id : id})
 .exec()
@@ -186,5 +162,4 @@ Product.remove({_id : id})
         error : err
     })
 })
-})
-module.exports = route
+}

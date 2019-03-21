@@ -4,9 +4,9 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
-const productRoute = require('./api/route/product')
-const ordersRoute = require('./api/route/orders')
-const userRoute = require('./api/route/user')
+const productRoute = require('./api/routes/product')
+const ordersRoute = require('./api/routes/orders')
+const userRoute = require('./api/routes/user')
 
 
 //this setting connect mongoDB

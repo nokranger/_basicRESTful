@@ -1,12 +1,10 @@
-const express = require('express')
-const route = express.Router()
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt =require('jsonwebtoken')
 
 const User = require('../models/user')
 
-route.get('/alluser',(req,res,next)=>{
+exports.user_get_alluser = (req,res,next)=>{
     User.find()
     .select('_id password email')
     .exec()
@@ -25,9 +23,9 @@ route.get('/alluser',(req,res,next)=>{
         }
         res.status(200).json(allusers)
     })
-})
+}
 
-route.post('/signup', (req, res, next) => {
+exports.user_signup = (req, res, next) => {
     User.find({email : req.body.email})
     .exec()
     .then(user => {
@@ -64,9 +62,9 @@ route.post('/signup', (req, res, next) => {
             })
         }
     })
-})
+}
 
-route.post('/login',(req,res,next) => {
+exports.user_login = (req,res,next) => {
     User.find({ email : req.body.email})
     .exec()
     .then(user => {
@@ -105,9 +103,9 @@ route.post('/login',(req,res,next) => {
             error : err
         })
     })
-})
+}
 
-route.delete('/:userId',(req, res, next) => {
+exports.user_delete_user = (req, res, next) => {
     User.deleteOne({_id : req.params.userId})
     .exec()
     .then(result => {
@@ -122,5 +120,4 @@ route.delete('/:userId',(req, res, next) => {
         })
     })
 
-})
-module.exports = route
+}
