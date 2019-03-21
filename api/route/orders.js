@@ -4,10 +4,11 @@ const mongoose = require('mongoose')
 
 const Order = require('../models/order')
 const Product = require('../models/product')
+const checkAuth = require('/NodeJS/Restful_node/middleware/check-auth')
 
 
 // handle incoming get reques to orders
-route.get('/',function(req,res,next){
+route.get('/',checkAuth,function(req,res,next){
     Order.find()
     .select('_id product quantity')
     .populate('product','name')
@@ -38,7 +39,7 @@ route.get('/',function(req,res,next){
         })
     })
 })
-route.post('/',function(req,res,next){
+route.post('/',checkAuth,function(req,res,next){
     // let order = {
     //     productId : req.body.productId,
     //     quantity : req.body.quantity
@@ -80,7 +81,7 @@ route.post('/',function(req,res,next){
         })
     })
 })
-route.get('/:orderId',function(req,res,next){
+route.get('/:orderId',checkAuth,function(req,res,next){
     // res.status(200).json({
     //     message : 'Order were fetched',
     //     orderId : req.params.orderId
@@ -108,7 +109,7 @@ route.get('/:orderId',function(req,res,next){
         })
     })
 })
-route.delete('/:orderId',function(req,res,next){
+route.delete('/:orderId',checkAuth,function(req,res,next){
     // res.status(200).json({
     //     message : 'Order were deleted',
     //     orderId : req.params.orderId

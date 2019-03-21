@@ -2,6 +2,7 @@ const express = require('express')
 const route = express.Router()
 const mongoose = require('mongoose')
 const multer = require('multer')
+const checkAuth = require('/NodeJS/Restful_node/middleware/check-auth')
 
 const storage = multer.diskStorage({
     destination : function(req,file,cb){
@@ -31,7 +32,7 @@ const upload = multer({
 
 const Product = require('../models/product')
 
-route.get('/',function(req,res,next){
+route.get('/',checkAuth,function(req,res,next){
     // res.status(200).json({
     //     message : 'Handling get request to /product'
     // })
@@ -71,7 +72,7 @@ route.get('/',function(req,res,next){
         })
     })
 })
-route.post('/',upload.single('productImage'),function(req,res,next){
+route.post('/',checkAuth,upload.single('productImage'),function(req,res,next){
     // let product = {
     //     name : req.body.name,
     //     price : req.body.price
@@ -109,7 +110,7 @@ route.post('/',upload.single('productImage'),function(req,res,next){
 
     console.log(product)
 })
-route.get('/:productId',function(req,res,next){
+route.get('/:productId',checkAuth,function(req,res,next){
     const id = req.params.productId
     Product.findById(id)
     .select('name price _id productImage')
@@ -133,7 +134,7 @@ route.get('/:productId',function(req,res,next){
         res.status(500).json({error : err})
     })
 })
-route.patch('/:productId',function(req,res,next){
+route.patch('/:productId',checkAuth,function(req,res,next){
     // res.status(200).json({
     //     message : 'Update product'
     // })
@@ -161,7 +162,7 @@ route.patch('/:productId',function(req,res,next){
         })
     })
 })
-route.delete('/:productId',function(req,res,next){
+route.delete('/:productId',checkAuth,function(req,res,next){
     let id = req.params.productId
 Product.remove({_id : id})
 .exec()
